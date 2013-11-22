@@ -1,0 +1,17 @@
+#ngx_feature_libs="-llua -lm"
+#ngx_feature_libs="-lluajit-5.1"
+
+ngx_feature=""
+ngx_feature_libs=""
+ngx_feature_name=
+ngx_feature_run=no
+ngx_feature_incs=""
+ngx_feature_path=
+ngx_feature_test=""
+
+#CORE_LIBS="$CORE_LIBS $ngx_feature_libs"
+
+ngx_addon_name=ngx_tcp2http_module
+EVENT_MODULES="$EVENT_MODULES ngx_tcp2http_module "
+NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/src/ngx_tcp2http.c $ngx_addon_dir/src/ngx_tcp2http_session.c"
+
