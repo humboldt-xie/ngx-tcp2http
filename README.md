@@ -1,79 +1,24 @@
-nginx tcp lua module
+nginx tcp2http module
 =============
-A tcp module with lua support for nginx.
+A tcp2http module for nginx.
 
-Most code are copied from ngx-lua-module, and the directives/constants/APIs are 
-planed to be compatible with ngx-lua module. 
+Most code are copied from ngx-tcp-module  ngx-http-module , and the directives/constants/APIs are 
+using it with ngx-lua module. 
 
-Thanks for great job of ngx-lua module.
+Still need ngx-tcp-module's ngx.req.socket() to read data;
+
+Thanks for great job of ngx-lua module, ngx-tcp module.
 
 Directives
 ============
 
-server
-
-listen
-
-so_keepalive
-
-tcp_nodelay
-
-timeout
-
-resolver
-
-resolver_timeout
-
-allow
-
-deny
-
-access_log
-
-directio_alignment
-
-client_body_buffer_size
-
-lua_code_cache
-
-lua_package_path
-
-lua_package_cpath
-
-process_by_lua
-
-process_by_lua_file
-
-lua_socket_keepalive_timeout
-
-lua_socket_connect_timeout
-
-lua_socket_send_timeout
-
-lua_socket_send_lowat
-
-lua_socket_buffer_size
-
-lua_socket_pool_size
-
-lua_socket_read_timeout
 
 
 Nginx API for Lua
 ============
 
 Core constants
-------------
-
-    ngx.OK (0)
-    ngx.ERROR (-1)
-    ngx.AGAIN (-2)
-    ngx.DONE (-4)
-    ngx.DECLINED (-5)
-
-    ngx.null
-
-
+#todo
 ngx.socket.tcp
 ------------
 
@@ -93,23 +38,6 @@ ngx.req.socket
     receive
     receiveuntil
 
-ngx.say/ngx.print
-------------
-
-ngx.log
-
-Nginx log level constants
-------------
-
-    ngx.STDERR
-    ngx.EMERG
-    ngx.ALERT
-    ngx.CRIT
-    ngx.ERR
-    ngx.WARN
-    ngx.NOTICE
-    ngx.INFO
-    ngx.DEBUG
 
 Installation
 ============
@@ -147,10 +75,20 @@ Example
 
 nginx.conf:
 
-    tcp {
+    tcp2http {
         server {
             listen 8000;
-            process_by_lua_file conf/test.lua;
+			location  /
+			{
+				content_by_lua '
+				local sock = ngx.req.socket()
+				local re = sock:receive()
+				if re == nil then
+					ngx.print("error")
+				end
+				ngx.print(re)
+				';
+			}
         }
     }
 
@@ -183,7 +121,10 @@ Also there is a redis proxy example:
      tcp {
          server {
              listen 8000;
-             process_by_lua_file conf/redis.lua;
+             location /
+			 {
+				content_by_lua_file conf/redis.lua;
+			 }
          }
      }
 
