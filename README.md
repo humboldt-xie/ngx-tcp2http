@@ -61,7 +61,7 @@ Installation
 
     # Here we assume Nginx is to be installed under /opt/nginx/.
     ./configure --prefix=/opt/nginx \
-            --add-module=/path/to/ngx-tcp-lua-module
+            --add-module=/path/to/ngx-tcp2http
 
     make -j2
     make install
